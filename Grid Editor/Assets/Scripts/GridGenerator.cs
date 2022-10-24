@@ -6,13 +6,14 @@ using UnityEngine;
 //[RequireComponent (typeof (MeshRenderer))]
 public class GridGenerator : MonoBehaviour
 {
+    //public event System.Action OnWidthChanged;
     //[SerializeField] private int xSize;
     //[SerializeField] private int ySize;
     //[SerializeField] private Mesh mesh;
 
     [SerializeField] private float width = 6;
     [SerializeField] private float height = 6;
-    [SerializeField] private GameObject cylinderObject;
+    [SerializeField] private Cylinder cylinderObject;
     // it should be local scale x and z 
     float cylinderRadius;
     float cylinderRadiusX;
@@ -30,7 +31,7 @@ public class GridGenerator : MonoBehaviour
         cylinderLength = cylinderObject.transform.localScale.y;
         //CalculateAndArrangeRadius();
         //Generate();
-        Temp();
+        GenerateQuad();
     }
 
     //void Generate() 
@@ -73,7 +74,7 @@ public class GridGenerator : MonoBehaviour
     //}
 
     [ContextMenu ("Regenerate")]
-    void Temp() 
+    void GenerateQuad() 
     {
         string holderName = "GeneratedQuad";
         
@@ -166,7 +167,9 @@ public class GridGenerator : MonoBehaviour
                 cylinderPositions[index] = new Vector3(-width / 2 + ((i + cylinderRadius * 2) * 2 - 1),
                     cylinderLength,
                     -height / 2 + ((j + cylinderRadius * 2) * 2 - 1));
-                Instantiate(cylinderObject, cylinderPositions[index], Quaternion.identity).transform.parent = cylinderHolder;
+                Cylinder newCylinder = Instantiate(cylinderObject, cylinderPositions[index], Quaternion.identity);
+                newCylinder.gameObject.layer = 6;
+                newCylinder.transform.parent = cylinderHolder;
                 index++;
             }
         }
@@ -190,5 +193,28 @@ public class GridGenerator : MonoBehaviour
         cylinderObject.transform.localScale = localScale * 2;
         print(cylinderObject.transform.localScale + "x radius = " + cylinderRadiusX + "z radius = " + cylinderRadiusZ);
 
+    }
+
+    public void ChangeWidth(int widthIncreaseAmount) 
+    {
+        float newWidth = width + widthIncreaseAmount;
+
+        if (newWidth < 6 || newWidth > 12)
+        {
+            return;
+        }
+        width += widthIncreaseAmount;
+        GenerateQuad();
+    }
+
+    public void ChangeHeight(int heightIncreaseAmount) 
+    {
+        float newHeight = height + heightIncreaseAmount;
+        if (newHeight < 6 || newHeight > 14)
+        {
+            return;
+        }
+        height += heightIncreaseAmount;
+        GenerateQuad();
     }
 }
