@@ -7,22 +7,18 @@ using UnityEngine;
 public class GridGenerator : MonoBehaviour
 {
     //public event System.Action OnWidthChanged;
-    //[SerializeField] private int xSize;
-    //[SerializeField] private int ySize;
-    //[SerializeField] private Mesh mesh;
 
     [SerializeField] private float width = 6;
     [SerializeField] private float height = 6;
     [SerializeField] private Cylinder cylinderObject;
     // it should be local scale x and z 
     float cylinderRadius;
-    float cylinderRadiusX;
-    float cylinderRadiusZ;
+    //float cylinderRadiusX;
+    //float cylinderRadiusZ;
     float cylinderLength;
-    float ratioX = 0.16f; // 1/6 ratio
-    float ratioZ = 0.16f;
 
-    //private Vector3[] vertices;
+    //float ratioX = 0.16f; // 1/6 ratio
+    //float ratioZ = 0.16f;
 
 
     private void Start()
@@ -30,48 +26,8 @@ public class GridGenerator : MonoBehaviour
         cylinderRadius = cylinderObject.transform.localScale.x / 2;
         cylinderLength = cylinderObject.transform.localScale.y;
         //CalculateAndArrangeRadius();
-        //Generate();
         GenerateQuad();
     }
-
-    //void Generate() 
-    //{
-    //    mesh = GetComponent<MeshFilter>().mesh;
-    //    mesh = new Mesh();
-    //    mesh.name = "Procedural Grid";
-
-    //    vertices = new Vector3[(xSize + 1) * (ySize + 1)];
-    //    int index = 0;
-    //    for (int y = 0; y <= ySize; y++)
-    //    {
-    //        for (int x = 0; x <= xSize; x++)
-    //        {
-    //            vertices[index] = new Vector3(x, y);
-    //            index++;
-    //        }
-    //    }
-    //    mesh.vertices = vertices;
-
-    //    int[] triangles = new int[6];
-    //    triangles[0] = 0;
-    //    triangles[3] = triangles[2] = 1;
-    //    triangles[4] = triangles[1] = xSize + 1;
-    //    triangles[5] = xSize + 2;
-    //}
-
-    //private void OnDrawGizmos()
-    //{
-    //    if (vertices == null)
-    //    {
-    //        return;
-    //    }
-
-    //    Gizmos.color = Color.black;
-    //    for (int i = 0; i < vertices.Length; i++)
-    //    {
-    //        Gizmos.DrawSphere(vertices[i], 0.1f);
-    //    }
-    //}
 
     [ContextMenu ("Regenerate")]
     void GenerateQuad() 
@@ -175,25 +131,25 @@ public class GridGenerator : MonoBehaviour
         }
     }
 
-    void CalculateAndArrangeRadius()
-    {
-        //ratioX = 1 / width;
-        //ratioZ = 1 / height;
+    //void CalculateAndArrangeRadius()
+    //{
+    //    //ratioX = 1 / width;
+    //    //ratioZ = 1 / height;
 
-        //cylinderRadiusX = width * ratioX / 2;
-        //cylinderRadiusZ = height * ratioZ / 2;
-        //Vector3 localScale = Vector3.up + Vector3.forward * cylinderRadiusZ + Vector3.right * cylinderRadiusX;
-        //cylinderObject.transform.localScale = localScale * 2;
-        //print(cylinderObject.transform.localScale);
+    //    //cylinderRadiusX = width * ratioX / 2;
+    //    //cylinderRadiusZ = height * ratioZ / 2;
+    //    //Vector3 localScale = Vector3.up + Vector3.forward * cylinderRadiusZ + Vector3.right * cylinderRadiusX;
+    //    //cylinderObject.transform.localScale = localScale * 2;
+    //    //print(cylinderObject.transform.localScale);
 
-        cylinderRadiusX = (width * ratioX) / 2;
-        cylinderRadiusZ = (height * ratioZ) / 2;
+    //    cylinderRadiusX = (width * ratioX) / 2;
+    //    cylinderRadiusZ = (height * ratioZ) / 2;
 
-        Vector3 localScale = Vector3.up / 2 + Vector3.forward * cylinderRadiusZ + Vector3.right * cylinderRadiusX;
-        cylinderObject.transform.localScale = localScale * 2;
-        print(cylinderObject.transform.localScale + "x radius = " + cylinderRadiusX + "z radius = " + cylinderRadiusZ);
+    //    Vector3 localScale = Vector3.up / 2 + Vector3.forward * cylinderRadiusZ + Vector3.right * cylinderRadiusX;
+    //    cylinderObject.transform.localScale = localScale * 2;
+    //    print(cylinderObject.transform.localScale + "x radius = " + cylinderRadiusX + "z radius = " + cylinderRadiusZ);
 
-    }
+    //}
 
     public void ChangeWidth(int widthIncreaseAmount) 
     {
@@ -203,18 +159,23 @@ public class GridGenerator : MonoBehaviour
         {
             return;
         }
+
         width += widthIncreaseAmount;
+
         GenerateQuad();
     }
 
     public void ChangeHeight(int heightIncreaseAmount) 
     {
         float newHeight = height + heightIncreaseAmount;
+
         if (newHeight < 6 || newHeight > 14)
         {
             return;
         }
+
         height += heightIncreaseAmount;
+
         GenerateQuad();
     }
 }

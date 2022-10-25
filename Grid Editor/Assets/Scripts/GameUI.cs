@@ -44,7 +44,7 @@ public class GameUI : MonoBehaviour
         brush.SetBrushColor(colors[currentColorIndex]);
         nextColorImage.color = colors[nextColorIndex];
         colorButton.GetComponent<Image>().color = colors[currentColorIndex];
-        currentColorIndex = (currentColorIndex + 1) % colors.Length;        
-        nextColorIndex = (nextColorIndex + 1) % colors.Length;        
+        currentColorIndex = (currentColorIndex + 1) % colors.Length;
+        nextColorIndex = (nextColorIndex + 1) % colors.Length;
     }
 }
