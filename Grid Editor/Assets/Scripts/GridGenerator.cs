@@ -2,33 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//[RequireComponent (typeof (MeshFilter))]
-//[RequireComponent (typeof (MeshRenderer))]
 public class GridGenerator : MonoBehaviour
 {
-    //public event System.Action OnWidthChanged;
-
+    //public event System.Action OnSizeChanged;    
     [SerializeField] private float width = 6;
     [SerializeField] private float height = 6;
     [SerializeField] private Cylinder cylinderObject;
-    // it should be local scale x and z 
+
+    Cylinder[] cylinders;
+    Vector3[] cylinderPoss;
+    int cylinderLayerNumber = 6;
+
+    // for all cylinder should child of an Object
+    string holderName = "Generated Cylinders";
+    Transform cylinderHolder;
+
+    // for aligning the cylinders
     float cylinderRadius;
-    //float cylinderRadiusX;
-    //float cylinderRadiusZ;
     float cylinderLength;
 
-    //float ratioX = 0.16f; // 1/6 ratio
-    //float ratioZ = 0.16f;
-
-
+    // the number of cylinders will be half so for 3 -- 6 cylinders the width should be no less than 6 and no more than 12 
+    // same thing for the height
+    Vector2 minMaxWidth = new Vector2(6, 12);
+    Vector3 minMaxHeight = new Vector2(6, 14);
+    
     private void Start()
-    {
+    {        
         cylinderRadius = cylinderObject.transform.localScale.x / 2;
         cylinderLength = cylinderObject.transform.localScale.y;
-        //CalculateAndArrangeRadius();
+        GenerateAllCylinders();
         GenerateQuad();
     }
 
+    // plane generating
     [ContextMenu ("Regenerate")]
     void GenerateQuad() 
     {
@@ -87,9 +93,11 @@ public class GridGenerator : MonoBehaviour
         mesh.uv = uv;
 
         meshFilter.mesh = mesh;
-        GenerateCylinders();
+        //GenerateCylinders();
+        AlignCylinders();
     }
 
+    #region Deprecated
     void GenerateCylinders()
     {
         string holderName = "Generated Cylinders";
@@ -102,7 +110,6 @@ public class GridGenerator : MonoBehaviour
         Transform cylinderHolder = new GameObject(holderName).transform;
         cylinderHolder.parent = transform;
 
-        //CalculateAndArrangeRadius();
         int horizontalCylinderNumber = (int)(width / 2);
         int verticalCylinderNumber = (int)(height / 2);
         int cylinderCount = horizontalCylinderNumber * verticalCylinderNumber;
@@ -123,39 +130,83 @@ public class GridGenerator : MonoBehaviour
                 cylinderPositions[index] = new Vector3(-width / 2 + ((i + cylinderRadius * 2) * 2 - 1),
                     cylinderLength,
                     -height / 2 + ((j + cylinderRadius * 2) * 2 - 1));
+
                 Cylinder newCylinder = Instantiate(cylinderObject, cylinderPositions[index], Quaternion.identity);
-                newCylinder.gameObject.layer = 6;
+                newCylinder.gameObject.layer = cylinderLayerNumber;
                 newCylinder.transform.parent = cylinderHolder;
                 index++;
             }
         }
     }
+    #endregion
 
-    //void CalculateAndArrangeRadius()
-    //{
-    //    //ratioX = 1 / width;
-    //    //ratioZ = 1 / height;
+    void AlignCylinders()
+    {
+        int horizontalCylinderNumber = (int)(width / 2);
+        int verticalCylinderNumber = (int)(height / 2);
+        int cylinderCount = horizontalCylinderNumber * verticalCylinderNumber;
 
-    //    //cylinderRadiusX = width * ratioX / 2;
-    //    //cylinderRadiusZ = height * ratioZ / 2;
-    //    //Vector3 localScale = Vector3.up + Vector3.forward * cylinderRadiusZ + Vector3.right * cylinderRadiusX;
-    //    //cylinderObject.transform.localScale = localScale * 2;
-    //    //print(cylinderObject.transform.localScale);
+        Vector3[] cylinderPositions = new Vector3[cylinderCount];
 
-    //    cylinderRadiusX = (width * ratioX) / 2;
-    //    cylinderRadiusZ = (height * ratioZ) / 2;
+        // reset all cylinders 
+        for (int i = 0; i < cylinders.Length; i++)
+        {
+            cylinders[i].ResetColor();
+            cylinders[i].gameObject.SetActive(false);
+        }
 
-    //    Vector3 localScale = Vector3.up / 2 + Vector3.forward * cylinderRadiusZ + Vector3.right * cylinderRadiusX;
-    //    cylinderObject.transform.localScale = localScale * 2;
-    //    print(cylinderObject.transform.localScale + "x radius = " + cylinderRadiusX + "z radius = " + cylinderRadiusZ);
+        // adjusting the positions of the appropriate cylinders and setActive true
+        int index = 0;
+        for (int i = 0; i < horizontalCylinderNumber; i++)
+        {
+            for (int j = 0; j < verticalCylinderNumber; j++)
+            {
+                cylinderPositions[index] = new Vector3(-width / 2 + ((i + cylinderRadius * 2) * 2 - 1),
+                    cylinderLength,
+                    -height / 2 + ((j + cylinderRadius * 2) * 2 - 1));
+                cylinders[index].transform.position = cylinderPositions[index];
+                cylinders[index].gameObject.SetActive(true);
+                index++;
+            }
+        }
 
-    //}
+    }
+
+    // Generating all cylinders so wont istantiate anymore if on max width and max height
+    // will only use the SetActive function when necessary
+    void GenerateAllCylinders()
+    {
+        if (transform.Find(holderName))
+        {
+            DestroyImmediate(transform.Find(holderName).gameObject);
+        }
+
+        int maxCylinderCount = (int)(minMaxWidth.y / 2 * minMaxHeight.y / 2);
+        cylinders = new Cylinder[maxCylinderCount];
+        cylinderPoss = new Vector3[maxCylinderCount];
+        int index = 0;
+        cylinderHolder = new GameObject(holderName).transform;
+        cylinderHolder.parent = transform;
+
+        for (int i = 0; i < minMaxWidth.y / 2; i++)
+        {
+            for (int j = 0; j < minMaxHeight.y / 2; j++)
+            {
+                cylinders[index] = Instantiate(cylinderObject, new Vector3(0, 0, 0), Quaternion.identity) as Cylinder;
+                cylinderPoss[index] = cylinders[index].transform.position;
+                cylinders[index].gameObject.layer = cylinderLayerNumber;
+                cylinders[index].transform.parent = cylinderHolder;
+                cylinders[index].gameObject.SetActive(false);
+                index++;
+            }
+        }
+    }
 
     public void ChangeWidth(int widthIncreaseAmount) 
     {
         float newWidth = width + widthIncreaseAmount;
 
-        if (newWidth < 6 || newWidth > 12)
+        if (newWidth < minMaxWidth.x || newWidth > minMaxWidth.y)
         {
             return;
         }
@@ -169,7 +220,7 @@ public class GridGenerator : MonoBehaviour
     {
         float newHeight = height + heightIncreaseAmount;
 
-        if (newHeight < 6 || newHeight > 14)
+        if (newHeight < minMaxHeight.x || newHeight > minMaxHeight.y)
         {
             return;
         }
