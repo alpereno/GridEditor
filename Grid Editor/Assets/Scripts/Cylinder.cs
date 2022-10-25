@@ -8,11 +8,11 @@ public class Cylinder : MonoBehaviour
     Color defaultColor;
     Color color;
 
-    private void Start()
+    private void Awake()
     {
         material = gameObject.GetComponent<Renderer>().material;
         defaultColor = material.color;
-        color = defaultColor;
+        color = defaultColor;        
     }
 
     public void ChangeColor(Color newColor)
@@ -21,8 +21,8 @@ public class Cylinder : MonoBehaviour
         material.color = color;
     }
 
-    //public void ResetColor() 
-    //{
-    //    ChangeColor(defaultColor);
-    //}
+    public void ResetColor()
+    {
+        ChangeColor(defaultColor);
+    }
 }
