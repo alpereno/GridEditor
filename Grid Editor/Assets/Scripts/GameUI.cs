@@ -6,9 +6,9 @@ public class GameUI : MonoBehaviour
 {
     [SerializeField] private Color[] colors;
     [SerializeField] private RawImage nextColorImage;
-    [SerializeField] private Button colorButton;
+    [SerializeField] private Button colorButton;      // To change color of button
     
-    GridGenerator gridGenerator;
+    GridGenerator gridGenerator;    // to resize
     Brush brush;
 
     int currentColorIndex = 0;

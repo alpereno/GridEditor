@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Brush : MonoBehaviour
 {
+    // This class painting objects to brush color which is had a correct layermask 
     [SerializeField] private LayerMask cylinderMask;
 
     Camera viewCamera;    

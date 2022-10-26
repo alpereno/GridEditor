@@ -5,7 +5,7 @@ using UnityEngine;
 public class TextFileManager : MonoBehaviour
 {
     // The Only task is writing given info to textfile
-    // This class could be static with JsonHelper
+    // This class could be static with JSonHelper
 
     StreamWriter sW;
     string path;
