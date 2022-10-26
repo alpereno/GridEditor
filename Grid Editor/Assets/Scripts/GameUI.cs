@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -46,5 +44,10 @@ public class GameUI : MonoBehaviour
         colorButton.GetComponent<Image>().color = colors[currentColorIndex];
         currentColorIndex = (currentColorIndex + 1) % colors.Length;
         nextColorIndex = (nextColorIndex + 1) % colors.Length;
+    }
+
+    public void SaveData()
+    {
+        FindObjectOfType<JsonHelper>().CreateJsonFile();
     }
 }
