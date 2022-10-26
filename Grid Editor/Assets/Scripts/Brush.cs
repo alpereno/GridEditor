@@ -5,10 +5,11 @@ using UnityEngine;
 public class Brush : MonoBehaviour
 {
     [SerializeField] private LayerMask cylinderMask;
+
     Camera viewCamera;    
     float maxDistance = 100f;
-    public Color brushColor;
-    public Color defaultBrushColor;
+    Color brushColor;
+    Color defaultBrushColor;
 
     private void Start()
     {        

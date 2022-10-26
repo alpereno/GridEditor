@@ -10,7 +10,7 @@ public class GridGenerator : MonoBehaviour
     [SerializeField] private Cylinder cylinderObject;
 
     Cylinder[] cylinders;
-    Vector3[] cylinderPoss;
+    //Vector3[] cylinderPoss;
     int cylinderLayerNumber = 6;
 
     // for all cylinder should child of an Object
@@ -144,9 +144,6 @@ public class GridGenerator : MonoBehaviour
     {
         int horizontalCylinderNumber = (int)(width / 2);
         int verticalCylinderNumber = (int)(height / 2);
-        int cylinderCount = horizontalCylinderNumber * verticalCylinderNumber;
-
-        Vector3[] cylinderPositions = new Vector3[cylinderCount];
 
         // reset all cylinders 
         for (int i = 0; i < cylinders.Length; i++)
@@ -161,10 +158,10 @@ public class GridGenerator : MonoBehaviour
         {
             for (int j = 0; j < verticalCylinderNumber; j++)
             {
-                cylinderPositions[index] = new Vector3(-width / 2 + ((i + cylinderRadius * 2) * 2 - 1),
+                Vector3 currentCylinderPos = new Vector3(-width / 2 + ((i + cylinderRadius * 2) * 2 - 1),
                     cylinderLength,
                     -height / 2 + ((j + cylinderRadius * 2) * 2 - 1));
-                cylinders[index].transform.position = cylinderPositions[index];
+                cylinders[index].transform.position = currentCylinderPos;
                 cylinders[index].gameObject.SetActive(true);
                 index++;
             }
@@ -183,7 +180,6 @@ public class GridGenerator : MonoBehaviour
 
         int maxCylinderCount = (int)(minMaxWidth.y / 2 * minMaxHeight.y / 2);
         cylinders = new Cylinder[maxCylinderCount];
-        cylinderPoss = new Vector3[maxCylinderCount];
         int index = 0;
         cylinderHolder = new GameObject(holderName).transform;
         cylinderHolder.parent = transform;
@@ -193,8 +189,8 @@ public class GridGenerator : MonoBehaviour
             for (int j = 0; j < minMaxHeight.y / 2; j++)
             {
                 cylinders[index] = Instantiate(cylinderObject, new Vector3(0, 0, 0), Quaternion.identity) as Cylinder;
-                cylinderPoss[index] = cylinders[index].transform.position;
                 cylinders[index].gameObject.layer = cylinderLayerNumber;
+                cylinders[index].gameObject.tag = "Cylinder";
                 cylinders[index].transform.parent = cylinderHolder;
                 cylinders[index].gameObject.SetActive(false);
                 index++;
