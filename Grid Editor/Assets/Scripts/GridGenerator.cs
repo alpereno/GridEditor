@@ -97,47 +97,49 @@ public class GridGenerator : MonoBehaviour
         AlignCylinders();
     }
 
+    //deprecated method.
+    //not optimized cause it destroy/creates objects over and over every time when size changed
     #region Deprecated
-    void GenerateCylinders()
-    {
-        string holderName = "Generated Cylinders";
+    //void GenerateCylinders()
+    //{
+    //    string holderName = "Generated Cylinders";
 
-        if (transform.Find(holderName))
-        {
-            DestroyImmediate(transform.Find(holderName).gameObject);
-        }
+    //    if (transform.Find(holderName))
+    //    {
+    //        DestroyImmediate(transform.Find(holderName).gameObject);
+    //    }
 
-        Transform cylinderHolder = new GameObject(holderName).transform;
-        cylinderHolder.parent = transform;
+    //    Transform cylinderHolder = new GameObject(holderName).transform;
+    //    cylinderHolder.parent = transform;
 
-        int horizontalCylinderNumber = (int)(width / 2);
-        int verticalCylinderNumber = (int)(height / 2);
-        int cylinderCount = horizontalCylinderNumber * verticalCylinderNumber;
+    //    int horizontalCylinderNumber = (int)(width / 2);
+    //    int verticalCylinderNumber = (int)(height / 2);
+    //    int cylinderCount = horizontalCylinderNumber * verticalCylinderNumber;
 
-        Vector3[] cylinderPositions = new Vector3[cylinderCount];
+    //    Vector3[] cylinderPositions = new Vector3[cylinderCount];
 
-        //for (int i = 0; i < cylinderCount; i++)
-        //{
-        //    cylinderPositions[i] = new Vector3(-width / 2 + (i + 1) * cylinderRadius, 0, -height / 2 + (i + 1) * cylinderRadius);
-        //    Instantiate(cylinderObject, cylinderPositions[i], Quaternion.identity);
-        //}
+    //    //for (int i = 0; i < cylinderCount; i++)
+    //    //{
+    //    //    cylinderPositions[i] = new Vector3(-width / 2 + (i + 1) * cylinderRadius, 0, -height / 2 + (i + 1) * cylinderRadius);
+    //    //    Instantiate(cylinderObject, cylinderPositions[i], Quaternion.identity);
+    //    //}
 
-        int index = 0;
-        for (int i = 0; i < horizontalCylinderNumber; i++)
-        {
-            for (int j = 0; j < verticalCylinderNumber; j++)
-            {
-                cylinderPositions[index] = new Vector3(-width / 2 + ((i + cylinderRadius * 2) * 2 - 1),
-                    cylinderLength,
-                    -height / 2 + ((j + cylinderRadius * 2) * 2 - 1));
+    //    int index = 0;
+    //    for (int i = 0; i < horizontalCylinderNumber; i++)
+    //    {
+    //        for (int j = 0; j < verticalCylinderNumber; j++)
+    //        {
+    //            cylinderPositions[index] = new Vector3(-width / 2 + ((i + cylinderRadius * 2) * 2 - 1),
+    //                cylinderLength,
+    //                -height / 2 + ((j + cylinderRadius * 2) * 2 - 1));
 
-                Cylinder newCylinder = Instantiate(cylinderObject, cylinderPositions[index], Quaternion.identity);
-                newCylinder.gameObject.layer = cylinderLayerNumber;
-                newCylinder.transform.parent = cylinderHolder;
-                index++;
-            }
-        }
-    }
+    //            Cylinder newCylinder = Instantiate(cylinderObject, cylinderPositions[index], Quaternion.identity);
+    //            newCylinder.gameObject.layer = cylinderLayerNumber;
+    //            newCylinder.transform.parent = cylinderHolder;
+    //            index++;
+    //        }
+    //    }
+    //}
     #endregion
 
     void AlignCylinders()
